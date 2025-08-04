@@ -1,59 +1,37 @@
-// Sayfa kaydırma animasyonu
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        
-        document.querySelector(this.getAttribute('href')).scrollIntoView({
-            behavior: 'smooth'
-        });
-    });
-});
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.querySelector("form");
+  form?.addEventListener("submit", e => {
+    e.preventDefault();
+    alert("Mesajınız alındı. Teşekkür ederiz!");
+  });
 
-// Yukarı çık butonu görünürlüğü
-window.addEventListener('scroll', function() {
-    const scrollBtn = document.querySelector('.scroll-to-top');
-    if (window.pageYOffset > 300) {
-        scrollBtn.style.display = 'flex';
+  // Scroll gradyan kontrolü
+  const fadeEl = document.querySelector(".fade-bottom");
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 0) {
+      fadeEl?.classList.add("visible");
     } else {
-        scrollBtn.style.display = 'none';
+      fadeEl?.classList.remove("visible");
     }
+  });
+
+  // Güncelleme: Msg-gncl-07 - Video ileri geri döngüsü
+  const forward = document.getElementById("video-forward");
+  const reverse = document.getElementById("video-reverse");
+
+  forward?.addEventListener("ended", () => {
+    forward.classList.add("hidden");
+    reverse.classList.remove("hidden");
+    reverse.currentTime = 0;
+    reverse.play();
+  });
+
+  reverse?.addEventListener("ended", () => {
+    reverse.classList.add("hidden");
+    forward.classList.remove("hidden");
+    forward.currentTime = 0;
+    forward.play();
+  });
+
+  console.debug("İleri-Geri video döngüsü başlatıldı.");
 });
-
-// Slider fonksiyonları
-let currentSlide = 0;
-const slides = document.querySelectorAll('.slide');
-const navBtns = document.querySelectorAll('.slider-nav-btn');
-
-function showSlide(n) {
-    slides.forEach(slide => slide.classList.remove('active'));
-    navBtns.forEach(btn => btn.classList.remove('active'));
-    
-    currentSlide = (n + slides.length) % slides.length;
-    
-    slides[currentSlide].classList.add('active');
-    navBtns[currentSlide].classList.add('active');
-}
-
-function nextSlide() {
-    showSlide(currentSlide + 1);
-}
-
-// Otomatik slider
-setInterval(nextSlide, 5000);
-
-// Nav butonları için event listener
-navBtns.forEach((btn, index) => {
-    btn.addEventListener('click', () => showSlide(index));
-});
-
-// Mobil menü toggle
-document.addEventListener('DOMContentLoaded', function() {
-    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-    const navLinks = document.querySelector('.nav-links');
-    
-    if (mobileMenuBtn) {
-        mobileMenuBtn.addEventListener('click', function() {
-            navLinks.classList.toggle('active');
-        });
-    }
-}); 
